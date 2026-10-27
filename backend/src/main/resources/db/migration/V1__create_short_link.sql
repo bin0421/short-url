@@ -1,0 +1,5 @@
+CREATE TABLE short_link (
+    code       BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    target_url VARCHAR(2048) NOT NULL,
+    created_at TIMESTAMPTZ   NOT NULL
+);

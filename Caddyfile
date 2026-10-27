@@ -1,0 +1,7 @@
+# Site address comes from DOMAIN (.env). For a public domain Caddy obtains and renews
+# a Let's Encrypt certificate automatically; for "localhost" it uses its internal CA.
+# reverse_proxy sets X-Forwarded-For to the real client IP, which the app's rate limit uses.
+{$DOMAIN} {
+	encode zstd gzip
+	reverse_proxy app:8080
+}

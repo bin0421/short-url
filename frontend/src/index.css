@@ -1,0 +1,93 @@
+:root {
+  --text: #1f1d24;
+  --muted: #6b6375;
+  --bg: #fff;
+  --border: #e5e4e7;
+  --accent: #5b3bd6;
+  --error: #c62828;
+  font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
+  color: var(--text);
+  background: var(--bg);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text: #f3f2f5;
+    --muted: #a39dab;
+    --bg: #16151a;
+    --border: #2e2c35;
+    --accent: #a58cff;
+    --error: #ff8a80;
+  }
+}
+
+body {
+  margin: 0;
+}
+
+main {
+  max-width: 40rem;
+  margin: 4rem auto;
+  padding: 0 1rem;
+}
+
+form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+label {
+  width: 100%;
+  color: var(--muted);
+}
+
+input {
+  flex: 1;
+  min-width: 0;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font: inherit;
+  color: inherit;
+  background: transparent;
+}
+
+button {
+  padding: 0.6rem 1rem;
+  border: 0;
+  border-radius: 6px;
+  font: inherit;
+  color: #fff;
+  background: var(--accent);
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.short-link {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.short-link button {
+  padding: 0.35rem 0.75rem;
+  border: 1px solid var(--border);
+  color: var(--text);
+  background: transparent;
+}
+
+[role='alert'] {
+  color: var(--error);
+}
+
+a {
+  color: var(--accent);
+  font-size: 1.25rem;
+}

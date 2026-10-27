@@ -1,0 +1,53 @@
+# Production stack: Caddy (HTTPS) -> app -> Postgres. See docs/deploy.md.
+# Usage on the server: cp .env.example .env (fill it in), then docker compose up -d --build
+#
+# Only Caddy publishes ports. The app trusts X-Forwarded-For for its per-IP rate limit,
+# so app (8080) and postgres (5432) must never be reachable from outside.
+services:
+  caddy:
+    image: caddy:2
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    environment:
+      DOMAIN: ${DOMAIN:?set DOMAIN in .env}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+    depends_on:
+      - app
+
+  app:
+    build: .
+    restart: unless-stopped
+    environment:
+      DB_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB:-shorturl}
+      DB_USERNAME: ${POSTGRES_USER:-shorturl}
+      DB_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+      PUBLIC_BASE_URL: ${PUBLIC_BASE_URL:?set PUBLIC_BASE_URL in .env}
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  postgres:
+    image: postgres:17
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-shorturl}
+      POSTGRES_USER: ${POSTGRES_USER:-shorturl}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U \"$$POSTGRES_USER\" -d \"$$POSTGRES_DB\""]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  caddy-data:
+  caddy-config:
+  postgres-data:
