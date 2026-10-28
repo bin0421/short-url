@@ -1,0 +1,38 @@
+# Render Blueprint: the single Docker image (frontend + API + redirects) and a Render Postgres.
+# Render's own proxy terminates HTTPS, so Caddy is not used here. See docs/deploy.md.
+services:
+  - type: web
+    name: short-url
+    runtime: docker
+    plan: free
+    region: singapore
+    healthCheckPath: /
+    envVars:
+      - key: DB_HOST
+        fromDatabase:
+          name: short-url-db
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: short-url-db
+          property: port
+      - key: DB_NAME
+        fromDatabase:
+          name: short-url-db
+          property: database
+      - key: DB_USERNAME
+        fromDatabase:
+          name: short-url-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: short-url-db
+          property: password
+
+databases:
+  - name: short-url-db
+    plan: free
+    region: singapore
+    postgresMajorVersion: "17"
+    databaseName: shorturl
+    user: shorturl

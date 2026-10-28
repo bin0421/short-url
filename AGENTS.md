@@ -9,7 +9,7 @@
 - Java is not on PATH. Run Gradle with `JAVA_HOME` set to `~/.jdks/graalvm-jdk-21.0.7`.
 - Backend tests use Testcontainers, so Docker must be running.
 - For running the app by hand, start Postgres with `docker compose -f compose.dev.yaml up -d`, then `bootRun` the backend (port 8080) and `npm run dev` the frontend (port 5173, proxies `/api` and numeric paths to the backend).
-- Production runs from `compose.yaml` + `Caddyfile` (env from `.env`, see `.env.example`); deploy steps are in `docs/deploy.md`. `compose.dev.yaml` is only the local dev database.
+- Production runs from `compose.yaml` + `Caddyfile` (env from `.env`, see `.env.example`); deploy steps are in `docs/deploy.md`. Render deploys from the `render.yaml` Blueprint instead (no Caddy; DB settings come in as `DB_HOST`/`DB_PORT`/`DB_NAME`). `compose.dev.yaml` is only the local dev database.
 
 ## Agent skills
 
